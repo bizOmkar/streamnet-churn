@@ -1,0 +1,30 @@
+bundle:
+  name: streamnet_churn
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog catalog
+    default: workspace
+  schema:
+    description: Schema for this environment's tables and model
+  schedule_status:
+    description: PAUSED or UNPAUSED
+    default: PAUSED
+
+targets:
+  dev:
+    mode: development          # prefixes names with [dev <you>], pauses schedules
+    default: true
+    variables:
+      schema: churn_dev
+
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      schema: churn_prod
+      schedule_status: UNPAUSED
